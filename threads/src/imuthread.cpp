@@ -1,6 +1,7 @@
 #include "threads.hpp"
 #include "BMI088.hpp"
 #include "IST8310.hpp"
+#include "ahrs.hpp"
 
 /* ============ 线程三件套 ============ */
 
@@ -10,6 +11,7 @@ static uint8_t   imu_stack[1024];
 /* IMU 对象 */
 BMI088::cBMI088 imu;
 cIST8310 mag;
+cAHRS    ahrs;    
 
 uint16_t imu_fail_cnt = 0;/* 连续异常计数：判断通信/数据是不是真的坏了 */
 
@@ -27,6 +29,7 @@ static void imu_thread_entry(ULONG thread_input)
     imu.VerifyGyroChipID();     /* 检查陀螺仪 ID */
     imu.Calibrate();            /* 陀螺仪零偏标定（此时车必须静止） */
     mag.Config();               /* 磁力计复位 + 校验 ID + 写配置 */
+    ahrs.Init();                /*四元数复位*/
     
         /* 初始化成功就告诉 alive 一声 */
     if (!imu.self_test.ACC_CHIP_ID_ERR &&
@@ -38,6 +41,7 @@ static void imu_thread_entry(ULONG thread_input)
     }
     uint8_t temp_counter = 0;
     uint8_t mag_counter = 0;
+    ULONG   last_ms = tx_time_get();     /* 用于实测 dt */
    
     
 
@@ -58,6 +62,19 @@ static void imu_thread_entry(ULONG thread_input)
         /* 校验（把错误标志写进 imu.self_test） */
         imu.VerifyAccData();
         imu.VerifyGyroData();
+
+        /* 姿态解算------------------------------------------------- */
+        ULONG now_ms = tx_time_get();
+        float dt = (now_ms - last_ms) * 0.001f;   /* 实测间隔，别写死 1ms */
+        last_ms = now_ms;
+        if (dt <= 0.0f || dt > 0.1f) dt = 0.001f; /* 兜底：第一拍/异常 */
+
+        ahrs.Update(imu.gyro_data.x, imu.gyro_data.y, imu.gyro_data.z,
+                    imu.acc_data.x,  imu.acc_data.y,  imu.acc_data.z,
+                    dt);
+
+        
+        /* ------------------------------------------------------------------ */
 
         /* 温控：加热是慢过程，不用每 1ms 都算，10ms 一次就够 */
         if (++temp_counter >= 10)

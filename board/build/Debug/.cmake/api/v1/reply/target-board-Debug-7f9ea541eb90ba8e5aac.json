@@ -43,7 +43,7 @@
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 72,
+				"line" : 73,
 				"parent" : 0
 			},
 			{
@@ -345,7 +345,8 @@
 				28,
 				29,
 				30,
-				31
+				31,
+				32
 			]
 		}
 	],
@@ -423,7 +424,8 @@
 				28,
 				29,
 				30,
-				31
+				31,
+				32
 			]
 		},
 		{
@@ -438,7 +440,6 @@
 			"name" : "Object Libraries",
 			"sourceIndexes" : 
 			[
-				32,
 				33,
 				34,
 				35,
@@ -621,7 +622,8 @@
 				212,
 				213,
 				214,
-				215
+				215,
+				216
 			]
 		}
 	],
@@ -769,6 +771,12 @@
 			"backtrace" : 6,
 			"compileGroupIndex" : 2,
 			"path" : "D:/f407_homework_jfang635/national day/libs/src/crc.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 6,
+			"compileGroupIndex" : 2,
+			"path" : "D:/f407_homework_jfang635/national day/libs/src/ahrs.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

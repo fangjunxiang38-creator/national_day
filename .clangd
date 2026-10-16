@@ -1,0 +1,3 @@
+# 让 clangd 使用 CMake 生成的编译数据库（board 工程一次构建覆盖 board/bsp/libs/modules/threads）
+CompileFlags:
+  CompilationDatabase: board/build/Debug

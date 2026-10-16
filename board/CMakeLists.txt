@@ -56,6 +56,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${USER_DIR}/libs/src/pid.cpp
     ${USER_DIR}/libs/src/math.cpp
     ${USER_DIR}/libs/src/crc.cpp
+    ${USER_DIR}/libs/src/ahrs.cpp
 
     ${USER_DIR}/modules/src/BMI088.cpp
     ${USER_DIR}/modules/src/DJIMotorHandler.cpp
