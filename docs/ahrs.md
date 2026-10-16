@@ -1,2 +1,2 @@
-![alt text](ahrs.jpg)
+![alt text](../assets/ahrs.jpg)
 
